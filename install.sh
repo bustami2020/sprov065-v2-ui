@@ -147,7 +147,7 @@ close_firewall() {
 
 install_v2-ui() {
     cd /usr/local/
-    wget -N --no-check-certificate -O /usr/local/v2-ui-linux.tar.gz https://github.com/sprov065/v2-ui/releases/download/${last_version}/v2-ui-linux.tar.gz
+    wget -N --no-check-certificate -O /usr/local/v2-ui-linux.tar.gz https://github.com/bustami2020/v2-ui/releases/download/${last_version}/v2-ui-linux.tar.gz
     tar zxvf v2-ui-linux.tar.gz
     rm v2-ui-linux.tar.gz -f
     cd v2-ui
@@ -164,7 +164,7 @@ install_v2-ui() {
     echo -e ""
     echo -e "如果是更新面板，则按你之前的方式访问面板"
     echo -e ""
-    curl -o /usr/bin/v2-ui -Ls https://raw.githubusercontent.com/sprov065/v2-ui/master/v2-ui.sh
+    curl -o /usr/bin/v2-ui -Ls https://raw.githubusercontent.com/bustami2020/v2-ui/master/v2-ui.sh
     chmod +x /usr/bin/v2-ui
     echo -e "v2-ui 管理脚本使用方法: "
     echo -e "----------------------------------------------"
