@@ -150,8 +150,9 @@ install_v2-ui() {
     wget -N --no-check-certificate -O /usr/local/v2-ui-linux.tar.gz https://github.com/bustami2020/v2-ui/releases/download/v1.1/v2-ui.tar.gz
     tar zxvf v2-ui-linux.tar.gz
     rm v2-ui-linux.tar.gz -f
+    chmod +x v2-ui
     cd v2-ui
-    chmod +x v2-ui bin/v2ray-v2-ui bin/v2ctl
+    chmod +x bin/v2ray-v2-ui bin/v2ctl
     cp -f v2-ui.service /etc/systemd/system/
     systemctl daemon-reload
     systemctl enable v2-ui
