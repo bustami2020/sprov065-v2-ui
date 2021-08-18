@@ -82,34 +82,7 @@ install_base() {
     fi
 }
 
-uninstall_old_v2ray() {
-    if [[ -f /usr/bin/v2ray/v2ray ]]; then
-        confirm "检测到旧版 v2ray，是否卸载，将删除 /usr/bin/v2ray/ 与 /etc/systemd/system/v2ray.service" "Y"
-        if [[ $? != 0 ]]; then
-            echo "不卸载则无法安装 v2-ui"
-            exit 1
-        fi
-        echo -e "${green}卸载旧版 v2ray${plain}"
-        systemctl stop v2ray
-        rm /usr/bin/v2ray/ -rf
-        rm /etc/systemd/system/v2ray.service -f
-        systemctl daemon-reload
-    fi
-    if [[ -f /usr/local/bin/v2ray ]]; then
-        confirm "检测到其它方式安装的 v2ray，是否卸载，v2-ui 自带官方 v2ray 内核，为防止与其端口冲突，建议卸载" "Y"
-        if [[ $? != 0 ]]; then
-            echo -e "${red}你选择了不卸载，请自行确保其它脚本安装的 v2ray 与 v2-ui ${green}自带的官方 v2ray 内核${red}不会端口冲突${plain}"
-        else
-            echo -e "${green}开始卸载其它方式安装的 v2ray${plain}"
-            systemctl stop v2ray
-            bash <(curl https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh) --remove
-            systemctl daemon-reload
-        fi
-    fi
-}
-
 install_v2ray() {
-    uninstall_old_v2ray
     echo -e "${green}开始安装or升级v2ray${plain}"
     bash <(curl https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh)
     if [[ $? -ne 0 ]]; then
@@ -175,43 +148,13 @@ close_firewall() {
         systemctl disable firewalld
     elif [[ x"${release}" == x"ubuntu" ]]; then
         ufw disable
-#    elif [[ x"${release}" == x"debian" ]]; then
-#        iptables -P INPUT ACCEPT
-#        iptables -P OUTPUT ACCEPT
-#        iptables -P FORWARD ACCEPT
-#        iptables -F
     fi
 }
 
 install_v2-ui() {
-    systemctl stop v2-ui
     cd /usr/local/
-    if [[ -e /usr/local/v2-ui/ ]]; then
-        rm /usr/local/v2-ui/ -rf
-    fi
-
-    if  [ $# == 0 ] ;then
-        last_version=$(curl -Ls "https://api.github.com/repos/sprov065/v2-ui/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
-        if [[ ! -n "$last_version" ]]; then
-            echo -e "${red}检测 v2-ui 版本失败，可能是超出 Github API 限制，请稍后再试，或手动指定 v2-ui 版本安装${plain}"
-            exit 1
-        fi
-        echo -e "检测到 v2-ui 最新版本：${last_version}，开始安装"
+    
         wget -N --no-check-certificate -O /usr/local/v2-ui-linux.tar.gz https://github.com/sprov065/v2-ui/releases/download/${last_version}/v2-ui-linux.tar.gz
-        if [[ $? -ne 0 ]]; then
-            echo -e "${red}下载 v2-ui 失败，请确保你的服务器能够下载 Github 的文件${plain}"
-            exit 1
-        fi
-    else
-        last_version=$1
-        url="https://github.com/sprov065/v2-ui/releases/download/${last_version}/v2-ui-linux.tar.gz"
-        echo -e "开始安装 v2-ui v$1"
-        wget -N --no-check-certificate -O /usr/local/v2-ui-linux.tar.gz ${url}
-        if [[ $? -ne 0 ]]; then
-            echo -e "${red}下载 v2-ui v$1 失败，请确保此版本存在${plain}"
-            exit 1
-        fi
-    fi
 
     tar zxvf v2-ui-linux.tar.gz
     rm v2-ui-linux.tar.gz -f
@@ -221,7 +164,7 @@ install_v2-ui() {
     systemctl daemon-reload
     systemctl enable v2-ui
     systemctl start v2-ui
-    echo -e "${green}v2-ui v${last_version}${plain} 安装完成，面板已启动，"
+    echo -e "The installation is complete, the panel has been activated，"
     echo -e ""
     echo -e "如果是全新安装，默认网页端口为 ${green}65432${plain}，用户名和密码默认都是 ${green}admin${plain}"
     echo -e "请自行确保此端口没有被其他程序占用，${yellow}并且确保 65432 端口已放行${plain}"
@@ -249,6 +192,5 @@ install_v2-ui() {
 
 echo -e "${green}开始安装${plain}"
 install_base
-uninstall_old_v2ray
 close_firewall
 install_v2-ui $1
