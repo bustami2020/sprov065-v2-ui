@@ -140,9 +140,6 @@ uninstall() {
     echo ""
     echo -e "卸载成功，如果你想删除此脚本，则退出脚本后运行 ${green}rm /usr/bin/v2-ui -f${plain} 进行删除"
     echo ""
-    echo -e "Telegram 群组: ${green}https://t.me/sprov_blog${plain}"
-    echo -e "Github issues: ${green}https://github.com/sprov065/v2-ui/issues${plain}"
-    echo -e "博客: ${green}https://blog.sprov.xyz/v2-ui${plain}"
 
     if [[ $# == 0 ]]; then
         before_show_menu
@@ -284,19 +281,6 @@ show_log() {
     fi
 }
 
-install_bbr() {
-    bash <(curl -L -s https://github.com/sprov065/blog/raw/master/bbr.sh)
-    if [[ $? == 0 ]]; then
-        echo ""
-        echo -e "${green}安装 bbr 成功${plain}"
-    else
-        echo ""
-        echo -e "${red}下载 bbr 安装脚本失败，请检查本机能否连接 Github${plain}"
-    fi
-
-    before_show_menu
-}
-
 update_shell() {
     wget -O /usr/bin/v2-ui -N --no-check-certificate https://github.com/bustami2020/sprov065-v2-ui/raw/master/v2-ui.sh
     if [[ $? != 0 ]]; then
@@ -423,7 +407,7 @@ show_usage() {
 show_menu() {
     echo -e "
   ${green}v2-ui 面板管理脚本${plain}
---- https://blog.sprov.xyz/v2-ui ---
+--- https://www.kangarif.net/ ---
   ${green}0.${plain} 退出脚本
 ————————————————
   ${green}1.${plain} 安装 v2-ui
@@ -477,9 +461,7 @@ show_menu() {
         ;;
         13) check_install && disable
         ;;
-        14) install_bbr
-        ;;
-        *) echo -e "${red}请输入正确的数字 [0-14]${plain}"
+        *) echo -e "${red}请输入正确的数字 [0-13]${plain}"
         ;;
     esac
 }
