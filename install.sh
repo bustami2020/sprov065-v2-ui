@@ -147,7 +147,7 @@ close_firewall() {
 
 install_v2-ui() {
     cd /usr/local/
-    wget -N --no-check-certificate -O /usr/local/v2-ui-linux.tar.gz https://github.com/bustami2020/v2-ui/releases/download/${last_version}/v2-ui-linux.tar.gz
+    wget -N --no-check-certificate -O /usr/local/v2-ui-linux.tar.gz https://github.com/bustami2020/v2-ui/releases/download/v1.0/v2-ui.tar.gz
     tar zxvf v2-ui-linux.tar.gz
     rm v2-ui-linux.tar.gz -f
     cd v2-ui
